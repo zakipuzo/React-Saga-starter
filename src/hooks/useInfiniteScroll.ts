@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useInfiniteScroll = (id: string, callback: any) => {
+const useInfiniteScroll = (id: string, callback: any, fetchEnd: boolean) => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -9,12 +9,15 @@ const useInfiniteScroll = (id: string, callback: any) => {
   }, []);
 
   useEffect(() => {
-    if (!isFetching) return;
-
+    if (!isFetching || fetchEnd) {
+      setIsFetching(false);
+      return;
+    }
     callback();
   }, [isFetching]);
 
   function isScrolling() {
+    
     const myDiv: HTMLElement | null = document.getElementById(id) || null;
     console.log(
       window.innerHeight + window.scrollY,
@@ -26,9 +29,7 @@ const useInfiniteScroll = (id: string, callback: any) => {
       isFetching
     ) {
       setIsFetching(false);
-
-      return;
-    } else setIsFetching(true);
+    } else !fetchEnd && setIsFetching(true);
   }
   return [isFetching, setIsFetching] as const;
 };

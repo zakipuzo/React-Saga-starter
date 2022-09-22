@@ -24,7 +24,7 @@ const getPokemons = async (payload: { limit: number; offset: number }) => {
 
 function* pokemonsRequestSaga(action: any) {
   try {
-    const response: { results: [] } = yield call(getPokemons, {
+    const response: { results: [],count:number } = yield call(getPokemons, {
       limit: action.payload.values.limit,
       offset: action.payload.values.offset,
     });

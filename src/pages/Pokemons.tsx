@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { connect } from "react-redux";
-import { AnyAction, Dispatch } from "redux";
+import { Dispatch } from "redux";
 import PokeCard from "../components/pokemon/PokeCard";
 
 import PokeModal from "../components/pokemon/PokeModal";
@@ -13,9 +13,6 @@ import { IPokemonsDetailsPayload } from "../store/pokemon/details/types";
 import { pokemonsRequest } from "../store/pokemon/list/actions";
 import { getPokemonsSelector } from "../store/pokemon/list/selectors";
 import { IPokemonsPayload } from "../store/pokemon/list/types";
-import { appState } from "../store/rootReducer";
-import PokeLoader from "../components/pokemon/PokeLoader";
-
 /*props types*/
 type IGetPokemonsList = (params: IPokemonsPayload) => void;
 type IGetPokemonsDetails = (url: IPokemonsDetailsPayload) => void;
@@ -32,22 +29,26 @@ const Pokemons: React.FC<{
 }> = ({ getPokemonsList, getPokemonsDetails }) => {
   //State
   const [offset, setOffset]: any = useState(0);
-  const [list, setList]: any = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [fetchEnd, setFetchEnd] = useState(false);
   //Fetch Limit
-  const limit = 30;
+  const limit = 200;
 
   //infinit scroll hook
   const [isFetching, setIsFetching] = useInfiniteScroll(
     "pokeList",
-    fetchPokemons
+    fetchPokemons,
+    fetchEnd
   );
 
   const { items, pending, error }: any = useSelector(getPokemonsSelector);
 
-  //
+ 
   const callback = (data: IPokemon[]) => {
     setIsFetching(false);
+    if (data.length === 0) {
+      setFetchEnd(true);
+    }
   };
 
   const onPokemonCardClick = (url: string) => {
@@ -66,21 +67,19 @@ const Pokemons: React.FC<{
     setOffset(offset + limit);
   }
   useEffect(() => {
-    setIsFetching(true);
     fetchPokemons();
   }, []);
 
   return (
     <div className="mt-5 px-3">
       <div id="pokeList" className=" flex justify-between  gap-4  flex-wrap">
-      
         {items?.map((element: IPokemon, index: number) => (
           <div key={index + "poke"}>
             <PokeCard pokemon={element} onClick={onPokemonCardClick} />
           </div>
         ))}
-          {isFetching ? "Loading..." : ""}
       </div>
+      {isFetching ? "Loading..." : ""}
 
       {error ? error : ""}
       {showModal ? (
