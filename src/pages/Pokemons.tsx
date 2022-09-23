@@ -32,7 +32,7 @@ const Pokemons: React.FC<{
   const [showModal, setShowModal] = useState(false);
   const [fetchEnd, setFetchEnd] = useState(false);
   //Fetch Limit
-  const limit = 200;
+  const limit = 50;
 
   //infinit scroll hook
   const [isFetching, setIsFetching] = useInfiniteScroll(
@@ -72,14 +72,14 @@ const Pokemons: React.FC<{
 
   return (
     <div className="mt-5 px-3">
-      <div id="pokeList" className=" flex justify-between  gap-4  flex-wrap">
-        {items?.map((element: IPokemon, index: number) => (
-          <div key={index + "poke"}>
-            <PokeCard pokemon={element} onClick={onPokemonCardClick} />
+      <div id="pokeList" className=" flex justify-evenly  gap-4  flex-wrap">
+        {items?.map((pokemon: IPokemon, index: number) => (
+          <div key={index + "poke"} className="pokemon" onClick={() => onPokemonCardClick(pokemon.url)} >
+            <PokeCard pokemon={pokemon}   />
           </div>
         ))}
       </div>
-      {isFetching ? "Loading..." : ""}
+      {isFetching && !fetchEnd ? "Loading..." : ""}
 
       {error ? error : ""}
       {showModal ? (

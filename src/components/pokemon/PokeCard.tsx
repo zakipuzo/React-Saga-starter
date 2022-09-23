@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
 
 interface props {
-  pokemon: { name: string; url: string; color: string };
-  onClick: any;
+  pokemon: { name: string; url: string; color: string }; 
 }
 
-const PokeCard = ({ pokemon, onClick }: props) => {
+const PokeCard = ({ pokemon  }: props) => {
   useEffect(() => {
     return () => {};
   }, []);
 
   return (
-    <div
-      onClick={() => onClick(pokemon.url)}
+    <div 
       className={`p-4 my-4 flex rounded-lg   shadow justify-center items-center border border-solid border-gray-500 w-[160px] h-[160px] cursor-pointer  opacity-90 hover:opacity-100`}
       style={{ background: "#" + pokemon.color }}
     >

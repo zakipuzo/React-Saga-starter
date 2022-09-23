@@ -17,12 +17,7 @@ const useInfiniteScroll = (id: string, callback: any, fetchEnd: boolean) => {
   }, [isFetching]);
 
   function isScrolling() {
-    
     const myDiv: HTMLElement | null = document.getElementById(id) || null;
-    console.log(
-      window.innerHeight + window.scrollY,
-      myDiv && myDiv.scrollHeight
-    );
 
     if (
       (myDiv && window.innerHeight + window.scrollY <= myDiv.scrollHeight) ||
